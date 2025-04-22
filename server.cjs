@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('public'));
+app.use(express.static("public", { dotfiles: 'allow' } ));
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 
 const wss = new WebSocketServer({ port: 3001 });
