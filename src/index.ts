@@ -56,7 +56,7 @@ async function main() {
         }
 
         if (action === "sale") {
-            await cashierMode()
+            await cashierMode(user)
         }
 
         if (action === 'inventory' && user.role === "admin") {
@@ -67,7 +67,10 @@ async function main() {
             console.log(listProducts())
         }
 
-        if (action === "exit") break
+        if (action === "exit") {
+            console.log(t('main.menu.goodbye'))
+            break
+        }
     }
 }
 

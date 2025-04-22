@@ -8,6 +8,7 @@
   "main.menu.exit": "Quitter",
   "main.menu.list": "Lister les produits",
   "main.menu.prompt": "Que voulez-vous faire ?",
+  "main.menu.goodbye": "A bientot !",
   "inventory.menu.title": "Menu stock :",
   "inventory.menu.create": "Créer un nouveau produit",
   "inventory.menu.edit": "Modifier un produit",

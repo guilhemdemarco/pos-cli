@@ -1,9 +1,11 @@
 import prompts from "prompts";
 import type { Product } from "./models/Product";
-import { findProductById } from "./services/ProductService";
+import { findProductById, updateProduct } from "./services/ProductService";
 import { selectProduct } from "./utils/selectProducts";
 import enUS from "../locales/en-us.json";
 import frFR from "../locales/fr-fr.json"
+import { recordSale } from "./services/SaleService";
+import type { User } from "./models/User";
 
 interface CartItem{
     product: Product,
@@ -21,7 +23,7 @@ function t(key: string, vars?: Record<string, string | number>) {
     return str;
 }
 
-export async function cashierMode() {
+export async function cashierMode(cashier: User) {
     const cart: CartItem[] = []
 
     let lastAddedIndex: number | null = null;
@@ -45,7 +47,7 @@ export async function cashierMode() {
 
         if (input.startsWith(":")){
             const [cmd, ...args] = input.slice(1).trim().split(" ")
-            const handled = await handleCommand(cmd, args, cart, getLastIndex, setLastIndex)
+            const handled = await handleCommand(cmd, args, cart, getLastIndex, setLastIndex, cashier)
             if (handled === "quit") break
             continue
         }
@@ -95,12 +97,57 @@ async function handleCommand(cmd: string,
     args: string[],
     cart: CartItem[],
     getLastIndex: () => number | null,
-    setLastIndex: (index: number | null) => void
+    setLastIndex: (index: number | null) => void,
+    cashier: User
 ): Promise<"ok" | "quit"> {
     switch (cmd){
         case "q":
         case "quit":
             return "quit";
+        
+        case "co":
+        case "checkout":{
+            if (cart.length === 0){
+                console.log("Cart is empty")
+                await pause()
+                return 'ok'
+            }
+
+            console.log("Checking stock...")
+            for (const item of cart){
+                if (item.quantity > item.product.stock){
+                    console.log(`Not enough stock for ${item.product.name}`)
+                    await pause()
+                    return "ok"
+                }
+                else{
+                    updateProduct(item.product.id, {
+                        stock: item.product.stock - item.quantity
+                    })
+                }
+            }
+
+            const saleItems = cart.map(item => ({
+                productId: item.product.id,
+                name: item.product.name,
+                price: item.product.price,
+                quantity: item.quantity
+            }));
+
+            
+            const sale = recordSale(saleItems)
+            console.log("\n Sale recorded!");
+            console.log(`Sale ID: ${sale.id}`);
+            console.log(`Time: ${sale.timestamp}`);
+            console.log(`Total: €${sale.total.toFixed(2)}\n`);
+
+            cart.length = 0
+            setLastIndex(null)
+
+            await pause()
+            return "ok"
+        }
+
         
         case "rm":{
             const index = args[0] ? parseInt(args[0]) - 1 : getLastIndex() 

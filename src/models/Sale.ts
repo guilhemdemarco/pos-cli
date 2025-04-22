@@ -1,11 +1,16 @@
-export interface SaleItem{
-    productId: string,
-    quantity: number
+export interface SaleItem {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
 }
 
-export interface Sale{
-    id: string,
-    items: SaleItem[],
-    total: number,
-    date: string
+export interface Sale {
+    id: string;
+    timestamp: string;
+    userId: string;
+    items: SaleItem[];
+    total: number;
+    hash: string;
+    previous_hash: string;
 }
