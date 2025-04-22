@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CLI in Browser</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+        <style>body { margin: 0; }</style>
+    </head>
+    <body>
+        <div id="terminal" style="height: 100vh;"></div>
+        <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+        <script>
+            const term = new Terminal({
+                cursorBlink: true,
+                fontFamily: 'monospace',
+                fontSize: 14,
+                cols: 80,
+                rows: 24,
+            });
+            //term.setOption('scrollback', 1000);
+
+
+            term.open(document.getElementById('terminal'));
+
+            const socket = new WebSocket('ws://localhost:3001');
+
+            socket.onmessage = (event) => {
+                term.write(event.data);
+            };
+
+            term.onData(data => {
+                socket.send(data);
+            });
+        </script>
+    </body>
+</html>
