@@ -2,14 +2,36 @@ const express = require('express');
 const { WebSocketServer } = require('ws');
 const pty = require('node-pty');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
+const http = require('http');
+
+// Load SSL certificates
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.static("public", { dotfiles: 'allow' } ));
-app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 
-const wss = new WebSocketServer({ port: 3001 });
+// Create HTTPS server
+const httpsServer = https.createServer(credentials, app);
+
+// Start HTTPS server
+httpsServer.listen(PORT, () => {
+  console.log(`Listening on https://localhost:${PORT}`);
+});
+
+// Redirect HTTP to HTTPS
+http.createServer((req, res) => {
+  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+  res.end();
+}).listen(80);
+
+// WebSocket server over HTTPS
+const wss = new WebSocketServer({ server: httpsServer });
 
 wss.on('connection', (ws) => {
   let ptyProcess;
