@@ -7,8 +7,8 @@ const https = require('https');
 const http = require('http');
 
 // Load SSL certificates
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/pos.blueflower.fr/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/pos.blueflower.fr/fullchain.pem', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
