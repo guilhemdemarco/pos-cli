@@ -1,5 +1,5 @@
 import prompts from "prompts"
-import { addProduct, adjustStock, deleteProduct, findProductById, listProducts, seedProducts, updateProduct } from "./services/ProductService"
+import { addProduct, adjustStock, deleteProduct, findProductById, listProducts, openProducts, seedProducts, updateProduct } from "./services/ProductService"
 import { authenticate } from "./services/UserService"
 import type { User } from "./models/User"
 import type { Product } from "./models/Product";
@@ -23,9 +23,9 @@ function t(key: string, vars?: Record<string, string | number>) {
 
 async function main() {
 
-    seedProducts()
-
+    openProducts()
     openSales()
+    
     const user = await login();
     if (!user) return
 

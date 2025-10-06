@@ -1,9 +1,10 @@
 import type { Product } from "../models/Product";
 
-const products: Map<string, Product> = new Map()
+let products: Map<string, Product> = new Map()
 
 export function addProduct(product: Product){
     products.set(product.id, product)
+    saveProducts()
 }
 
 export function listProducts(): Map<string, Product>{
@@ -23,6 +24,7 @@ export function updateProduct(id: string, data: Partial<Omit<Product, "id">> ): 
     if (data.stock !== undefined) product.stock = data.stock;
 
     products.set(product.id, product)
+    saveProducts()
     return true
 }
 
@@ -34,11 +36,15 @@ export function adjustStock(id: string, delta: number): boolean {
     if (newStock < 0) return false; // Prevent negative stock
 
     product.stock = newStock;
+
+    saveProducts()
     return true;
 }
 
 export function deleteProduct(id: string): boolean {
-    return products.delete(id);
+    let deleteProduct = products.delete(id);
+    saveProducts()
+    return deleteProduct
 }
 
 export function seedProducts() {
@@ -78,6 +84,26 @@ export function seedProducts() {
     for (const product of sampleProducts) {
         addProduct(product);
     }
+
+    saveProducts()
   
     console.log("Sample products seeded.");
+}
+
+async function saveProducts(){
+    //todo: use sqlite instead
+    //console.log("save ", products)
+    await Bun.write("data/products.json", JSON.stringify(Array.from(products.entries())))
+    //console.log("saved ", products)
+}
+
+export async function openProducts(){
+    let productsFile = Bun.file("data/products.json", {type: "application/json"})
+    if (! (await productsFile.exists())){
+        await seedProducts()
+        // try again
+        productsFile = Bun.file("data/products.json", {type: "application/json"})
+    }
+    let productsMap = await productsFile.json()
+    products = new Map<string, Product>(productsMap)
 }
