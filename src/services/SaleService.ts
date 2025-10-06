@@ -2,8 +2,8 @@ import type { Sale, SaleItem } from "../models/Sale";
 import {createHash} from "crypto"
 import type { User } from "../models/User";
 
-const sales: Sale[] = []
-const nf525Log: string[] = []
+let sales: Sale[] = []
+let nf525Log: string[] = []
 
 export function recordSale(items: SaleItem[], cashier: User):Sale {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -21,7 +21,7 @@ export function recordSale(items: SaleItem[], cashier: User):Sale {
     }
 
     const hash = generateHash(saleDataToHash)
-    
+    console.log(typeof nf525Log)
     nf525Log.push(hash)
 
     const sale: Sale = {
@@ -30,6 +30,7 @@ export function recordSale(items: SaleItem[], cashier: User):Sale {
     }
 
     sales.push(sale)
+    saveSales()
     return sale
 }
 
@@ -44,4 +45,29 @@ export function getSales(): Sale[]{
 
 export function getNF525Log(): string[]{
     return nf525Log
+}
+
+async function saveSales(){
+    // TODO: use sqlite instead
+    await Bun.write("data/sales.json", JSON.stringify(sales))
+    await Bun.write("data/log.json", JSON.stringify(nf525Log))
+}
+
+export async function openSales(){
+    //TODO: sqlite too
+    let salesFile = Bun.file("data/sales.json", {type:"application/json"})
+    let logFile = Bun.file("data/log.json", {type: "application/json"})
+    
+    if (!(await salesFile.exists())) {
+        await Bun.write("data/sales.json", "[]")
+        // try again or it wont read the file properly
+        salesFile = Bun.file("data/sales.json", {type:"application/json"})
+    }    
+    if (!(await logFile.exists())) {
+        await Bun.write("data/log.json", "[]")
+        logFile = Bun.file("data/log.json", {type: "application/json"})
+    }
+    
+    sales = await salesFile.json()
+    nf525Log = await logFile.json()
 }

@@ -8,6 +8,7 @@ import { cashierMode } from "./cashier";
 import { selectProduct } from "./utils/selectProducts";
 import enUS from "../locales/en-us.json";
 import frFR from "../locales/fr-fr.json"
+import { openSales } from "./services/SaleService";
 
 // Simple localization function with variable interpolation
 function t(key: string, vars?: Record<string, string | number>) {
@@ -24,8 +25,10 @@ async function main() {
 
     seedProducts()
 
+    openSales()
     const user = await login();
     if (!user) return
+
 
     while (true){
         const choices = user.role === 'admin'
