@@ -9,8 +9,6 @@ export function recordSale(items: SaleItem[], cashier: User):Sale {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const timestamp = new Date().toISOString()
 
-    
-
     const previous_hash = nf525Log.length > 0 ? nf525Log[nf525Log.length - 1] : "ROOT"
 
     const saleDataToHash = {

@@ -43,7 +43,7 @@
   "cashier.set_usage": "Usage: :set <quantity> [item#]",
   "cashier.quantity_updated": "Updated {name} quantity to {quantity}",
   "cashier.help_title": "Available commands:",
-  "cashier.help_pay": ":pay - Complete sale and process payment",
+  "cashier.help_checkout": ":checkout / :co - Complete sale and process payment",
   "cashier.help_cancel": ":cancel - Cancel current sale",
   "cashier.help_remove": ":rm [item#] - Remove item from cart",
   "cashier.help_set": ":set <quantity> [item#]- Change item quantity",

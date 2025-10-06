@@ -135,7 +135,7 @@ async function handleCommand(cmd: string,
             }));
 
             
-            const sale = recordSale(saleItems)
+            const sale = recordSale(saleItems, cashier)
             console.log("\n Sale recorded!");
             console.log(`Sale ID: ${sale.id}`);
             console.log(`Time: ${sale.timestamp}`);
@@ -217,7 +217,7 @@ async function handleCommand(cmd: string,
 
         case "help": {
             console.log(t("cashier.help_title"));
-            console.log(t("cashier.help_pay"));
+            console.log(t("cashier.help_checkout"));
             console.log(t("cashier.help_cancel"));
             console.log(t("cashier.help_remove"));
             console.log(t("cashier.help_list"));
