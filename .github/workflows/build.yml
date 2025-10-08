@@ -29,7 +29,7 @@ jobs:
         run: bun install
 
       - name: Build executable
-        run: bun build . --compile --outfile build/poscli
+        run: bun build . --compile --outfile build/poscli-${{ runner.os }}
 
       - name: Archive artifact
         uses: actions/upload-artifact@v4
