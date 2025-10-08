@@ -1,18 +1,19 @@
-import type { Sale, SaleItem } from "../models/Sale";
+import type { NF525Log, Sale, SaleItem } from "../models/Sale";
 import {createHash} from "crypto"
 import type { User } from "../models/User";
 
 let sales: Sale[] = []
-let nf525Log: string[] = []
+let nf525Log: NF525Log[] = []
 
 export function recordSale(items: SaleItem[], cashier: User):Sale {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const timestamp = new Date().toISOString()
 
-    const previous_hash = nf525Log.length > 0 ? nf525Log[nf525Log.length - 1] : "ROOT"
+    const previous_hash = nf525Log.length > 0 ? nf525Log[nf525Log.length - 1].hash : "ROOT"
+    const sale_id = String(sales.length + 1)
 
     const saleDataToHash = {
-        id: String(sales.length + 1),
+        id: sale_id,
         timestamp,
         items,
         total,
@@ -21,8 +22,12 @@ export function recordSale(items: SaleItem[], cashier: User):Sale {
     }
 
     const hash = generateHash(saleDataToHash)
-    console.log(typeof nf525Log)
-    nf525Log.push(hash)
+    // console.log(typeof nf525Log)
+    const nflog = {
+        sale_id,
+        hash
+    }
+    nf525Log.push(nflog)
 
     const sale: Sale = {
         ...saleDataToHash,
@@ -43,7 +48,7 @@ export function getSales(): Sale[]{
     return sales
 }
 
-export function getNF525Log(): string[]{
+export function getNF525Log(): NF525Log[]{
     return nf525Log
 }
 

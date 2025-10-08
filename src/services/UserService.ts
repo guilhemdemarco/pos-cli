@@ -1,5 +1,7 @@
 import type { User } from "../models/User";
 
+let loggedin_users: Map<String, User> = new Map<String, User>()
+
 const users: User[] = [
   {
     id: "1",

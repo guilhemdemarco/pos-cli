@@ -14,3 +14,8 @@ export interface Sale {
     hash: string;
     previous_hash: string;
 }
+
+export interface NF525Log {
+    sale_id: string,
+    hash: string
+}
