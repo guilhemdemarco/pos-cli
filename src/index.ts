@@ -8,7 +8,8 @@ import { cashierMode } from "./cashier";
 import { selectProduct } from "./utils/selectProducts";
 import enUS from "../locales/en-us.json";
 import frFR from "../locales/fr-fr.json"
-import { openSales } from "./services/SaleService";
+import { getSales, openSales } from "./services/SaleService";
+import { verifySale, type Sale } from "./models/Sale";
 
 // Simple localization function with variable interpolation
 function t(key: string, vars?: Record<string, string | number>) {
@@ -23,8 +24,27 @@ function t(key: string, vars?: Record<string, string | number>) {
 
 async function main() {
 
-    openProducts()
-    openSales()
+    await openProducts()
+    await openSales()
+
+    if (Bun.argv.includes("--verify")){
+
+        console.log("Verifying sales")
+
+        const sales = getSales()
+        let is_valid = true
+        let previous_sale: Sale | undefined = undefined
+        sales.forEach(sale => {
+            const verif = verifySale(sale, previous_sale)
+            if (is_valid) is_valid = verif
+            previous_sale = sale
+        })
+
+        if (is_valid) console.log("✅ All is good!")
+        else console.error("❌ Some sales were invalid. Check immediately.")
+        
+        return
+    }
     
     const user = await login();
     if (!user) return
