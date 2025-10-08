@@ -2,8 +2,8 @@ name: Build Bun Executables
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    tags:
+      - "v*"
 
 jobs:
   build:
