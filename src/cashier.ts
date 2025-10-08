@@ -184,6 +184,7 @@ async function handleCommand(cmd: string,
             return "ok";
         }
 
+        case "li":
         case "list": {
             const selectedId = await selectProduct()
             if (!selectedId){

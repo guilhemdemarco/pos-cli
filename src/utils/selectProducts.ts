@@ -14,7 +14,7 @@ export async function selectProduct(){
         name: "selectedId",
         message: "Select a product to edit: ",
         choices: Array.from(allProducts.entries()).map(([key, product]) => ({
-            title: `${product.name} (Stock: ${product.stock})`,
+            title: `${product.name} (Stock: ${product.stock}) [${product.id}]`,
             value: key
         }))
     });
