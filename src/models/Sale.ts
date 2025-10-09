@@ -29,6 +29,17 @@ export interface Signature {
     public_key_id: string
 }
 
+export interface Closure {
+    closure_id: string,
+    date: string,
+    total_sales_count: number,
+    total: number,
+    start_hash: string,
+    end_hash: string,
+    previous_hash: string,
+    hash: string
+}
+
 // --- Utility for checking if sale is valid
 
 export const PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----

@@ -4,7 +4,7 @@ import { findProductById, updateProduct } from "./services/ProductService";
 import { selectProduct } from "./utils/selectProducts";
 import enUS from "../locales/en-us.json";
 import frFR from "../locales/fr-fr.json"
-import { recordSale } from "./services/SaleService";
+import { openSales, recordSale } from "./services/SaleService";
 import type { User } from "./models/User";
 
 interface CartItem{
@@ -24,6 +24,8 @@ function t(key: string, vars?: Record<string, string | number>) {
 }
 
 export async function cashierMode(cashier: User) {
+    const salesOpened = await openSales()
+    if (!salesOpened) return
     const cart: CartItem[] = []
 
     let lastAddedIndex: number | null = null;

@@ -8,7 +8,7 @@ import { cashierMode } from "./cashier";
 import { selectProduct } from "./utils/selectProducts";
 import enUS from "../locales/en-us.json";
 import frFR from "../locales/fr-fr.json"
-import { getSales, openSales } from "./services/SaleService";
+import { closeDay, getSales, isDayClosed, isDayOpen, openDay, openSales } from "./services/SaleService";
 import { verifySale, type Sale } from "./models/Sale";
 
 // Simple localization function with variable interpolation
@@ -25,11 +25,12 @@ function t(key: string, vars?: Record<string, string | number>) {
 async function main() {
 
     await openProducts()
-    await openSales()
+    
 
     if (Bun.argv.includes("--verify")){
 
         console.log("Verifying sales")
+        await openSales()
 
         const sales = getSales()
         let is_valid = true
@@ -55,6 +56,7 @@ async function main() {
         ? [
             { title: t('main.menu.sale'), value: 'sale' },
             { title: t('main.menu.inventory'), value: 'inventory' },
+            { title: await isDayOpen() ? "Close day" : "Open day", value: 'openclose'},
             { title: t('main.menu.exit'), value: 'exit' }
         ]
         : [
@@ -84,6 +86,11 @@ async function main() {
 
         if (action === 'inventory' && user.role === "admin") {
             await manageInventory()
+        }
+
+        if (action === 'openclose' && user.role === "admin"){
+            if (await isDayClosed()) console.log("Fiscal day has been closed. You cannot open it again.")
+            else await isDayOpen() ? closeDay() : openDay()
         }
 
         if (action === "list" && user.role === "admin"){
