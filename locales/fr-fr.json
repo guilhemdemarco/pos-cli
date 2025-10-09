@@ -61,7 +61,7 @@
   "cashier.error.daynotopen": "La journée n'a pas été ouverte. Merci de contacter un administrateur",
 
   "admin.day.opening": "Ouverture jour fiscal " ,
-  "admin.day.opened": "Jour fiscal ouverte !",
+  "admin.day.opened": "Jour fiscal ouvert !",
   "admin.day.closing": "Fermeture jour fiscal " ,
   "admin.day.closed": "Jour fiscal fermé !",
   "admin.day.closed.id": "ID: ",
