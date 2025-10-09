@@ -5,6 +5,8 @@
   "login.success": "Logged in as {username} ({role})",
   "main.menu.sale": "Start Sale",
   "main.menu.inventory": "Manage Inventory",
+  "main.menu.openday": "Open Day",
+  "main.menu.closeday": "Close day",
   "main.menu.exit": "Exit",
   "main.menu.list": "List Products",
   "main.menu.prompt": "What do you want to do?",
@@ -53,5 +55,14 @@
   "cashier.press_enter": "Press enter to continue",
   "cashier.sale_cancelled": "Sale cancelled",
   "cashier.payment_complete": "Payment complete! Thank you.",
-  "cashier.empty_cart_payment": "Cannot process payment for empty cart"
+  "cashier.empty_cart_payment": "Cannot process payment for empty cart",
+  "cashier.error.dayclosed": "Fiscal day has been closed. You cannot open a sale.",
+  "cashier.error.daynotopen": "Fiscal day has not been opened yet. Please contact an administrator.",
+
+  "admin.day.opening": "Opening fiscal day " ,
+  "admin.day.opened": "Fiscal day successfully opened!",
+  "admin.day.closing": "Closing fiscal day " ,
+  "admin.day.closed": "Fiscal day successfully closed!",
+  "admin.day.closed.id": "ID: ",
+  "admin.day.closed.total": "Total sales: "
 }

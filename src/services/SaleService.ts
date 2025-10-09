@@ -1,6 +1,7 @@
 import { generateHash, PUBLIC_KEY, signHash, type Closure, type NF525Log, type Sale, type SaleItem, type Signature } from "../models/Sale";
 import {createHash, createSign, createVerify, Sign} from "crypto"
 import type { User } from "../models/User";
+import { t } from "..";
 
 let sales: Sale[] = []
 let nf525Log: NF525Log[] = []
@@ -74,12 +75,12 @@ export async function openSales(): Promise<boolean>{
     let logFile = Bun.file(salesLogPath, {type: "application/json"})
 
     if (await isDayClosed()){
-        console.log("Fiscal day has been closed. You cannot open a sale.")
+        console.log(t('cashier.error.dayclosed'))
         return false
     }
 
     if (!(await salesFile.exists())) {
-        console.log("Fiscal day has not been opened yet. Please contact an administrator.")
+        console.log(t('cashier.error.daynotopen'))
         return false
         // await Bun.write(salesDayPath, "[]")
         // // try again or it wont read the file properly
@@ -104,13 +105,13 @@ export async function isDayClosed():Promise<boolean>{
 }
 
 export async function openDay(){
-    console.log("Opening fiscal day " + getCurrentDay())
+    console.log(t('admin.day.opening')+ getCurrentDay())
     await Bun.write("data/"+ getCurrentDay()+".json", "[]" )
-    console.log("Fiscal day successfully opened!")
+    console.log(t('admin.day.opened'))
 }
 
 export async function closeDay(){
-    console.log("Closing fiscal day " + getCurrentDay())
+    console.log(t('admin.day.opened')+ getCurrentDay())
     const closurePath = "data/" + getCurrentDay() + ".json"
     const zclosurePath = "data/" + "Z-" +getCurrentDay() + ".json"
     const closureLogPath = "data/clog.json"
@@ -123,7 +124,7 @@ export async function closeDay(){
 
     let closureLog: string[] = []
     if ( !(await closureLogFile.exists())){
-        console.log("Creating clog file")
+        //console.log("Creating clog file")
         await Bun.write(closureLogPath, "[]")
     } else {const closureLog = await closureLogFile.json()}
 
@@ -157,9 +158,9 @@ export async function closeDay(){
 
     await Bun.write(zclosurePath, JSON.stringify(closureData))
 
-    console.log("Fiscal day successfully closed!")
-    console.log("Closure id ", closure_id)
-    console.log("Total sales: ", total_sales_count, total)
+    console.log(t('admin.day.closed'))
+    console.log(t('admin.day.closed.id'), closure_id)
+    console.log(t('admin.day.closed.total'), total_sales_count, total + "€")
 
 }
 

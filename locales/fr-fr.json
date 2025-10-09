@@ -5,6 +5,8 @@
   "login.success": "Connecté en tant que {username} ({role})",
   "main.menu.sale": "Démarrer une vente",
   "main.menu.inventory": "Gérer le stock",
+  "main.menu.openday": "Ouvrir la journée",
+  "main.menu.closeday": "Fermer la journée",
   "main.menu.exit": "Quitter",
   "main.menu.list": "Lister les produits",
   "main.menu.prompt": "Que voulez-vous faire ?",
@@ -54,5 +56,14 @@
   "cashier.sale_cancelled": "Vente annulée",
   "cashier.payment_complete": "Paiement effectué ! Merci.",
   "cashier.empty_cart_payment": "Impossible de traiter le paiement d'un panier vide",
-  "cashier.unknown_command": "Commande inconnue. Tapez :help pour la liste des commandes"
+  "cashier.unknown_command": "Commande inconnue. Tapez :help pour la liste des commandes",
+  "cashier.error.dayclosed": "La journée est fermée, Vous ne pouvez pas ouvrir de ventes",
+  "cashier.error.daynotopen": "La journée n'a pas été ouverte. Merci de contacter un administrateur",
+
+  "admin.day.opening": "Ouverture jour fiscal " ,
+  "admin.day.opened": "Jour fiscal ouverte !",
+  "admin.day.closing": "Fermeture jour fiscal " ,
+  "admin.day.closed": "Jour fiscal fermé !",
+  "admin.day.closed.id": "ID: ",
+  "admin.day.closed.total": "Ventes totales: "
 }

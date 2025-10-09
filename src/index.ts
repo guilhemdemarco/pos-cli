@@ -12,7 +12,7 @@ import { closeDay, getSales, isDayClosed, isDayOpen, openDay, openSales } from "
 import { verifySale, type Sale } from "./models/Sale";
 
 // Simple localization function with variable interpolation
-function t(key: string, vars?: Record<string, string | number>) {
+export function t(key: string, vars?: Record<string, string | number>) {
     let str = (frFR as any)[key] || key;
     if (vars) {
         for (const [k, v] of Object.entries(vars)) {
@@ -56,7 +56,7 @@ async function main() {
         ? [
             { title: t('main.menu.sale'), value: 'sale' },
             { title: t('main.menu.inventory'), value: 'inventory' },
-            { title: await isDayOpen() ? "Close day" : "Open day", value: 'openclose'},
+            { title: await isDayOpen() ? t('main.menu.closeday') : t('main.menu.openday'), value: 'openclose'},
             { title: t('main.menu.exit'), value: 'exit' }
         ]
         : [
